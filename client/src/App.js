@@ -7,7 +7,7 @@ import setAuthToken from "./utils/setAuthToken";
 import { Provider } from "react-redux";
 import store from "./store";
 
-//import Routes from './components/Routes';
+import Routes from './components/Routes';
 import "./App.css";
 
 // Check for token

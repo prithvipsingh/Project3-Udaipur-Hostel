@@ -25,7 +25,7 @@ class Dashboard extends Component {
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '2rem' }}>
 
           <div className="card hoverable" style={{ width: "18rem", hover: '', height: '22rem' }}>
-            <img src={student} className="card-img-top" alt="Cleaning" />
+            { <img src={student} className="card-img-top" alt="Cleaning" /> }
             <div className="card-body" style={{ height: '10rem' }}>
               <h5 className="card-title">Student</h5>
               <a href="/student" className="card-text">
@@ -35,7 +35,7 @@ class Dashboard extends Component {
           </div>
 
           <div className="card" style={{ width: "18rem", hover: '', height: '22rem' }}>
-            <img src={bedRoom} className="card-img-top" alt="Cleaning" />
+            { <img src={bedRoom} className="card-img-top" alt="Cleaning" /> }
             <div className="card-body">
               <h5 className="card-title">Room Repair/Cleaning Status</h5>
               <a href="/block">
@@ -45,7 +45,7 @@ class Dashboard extends Component {
           </div>
 
           <div className="card" style={{ width: "18rem", hover: '', height: '22rem' }}>
-            <img src={staff} className="card-img-top" alt="Cleaning" />
+            { <img src={staff} className="card-img-top" alt="Cleaning" /> }
             <div className="card-body">
               <h5 className="card-title">Staff Info</h5>
               <a href="/staff">
@@ -61,7 +61,7 @@ class Dashboard extends Component {
 }
 
 Dashboard.propTypes = {
-  // getCurrentUser: PropTypes.func.isRequired,
+ getCurrentUser: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
 };
 
