@@ -8,8 +8,8 @@ import Login from "./auth/Login";
 import Dashboard from "./pages/Dashboard";
 import PrivateRoute from './common/PrivateRoute';
 import Student from './pages/Student';
+import RoomAction from "./pages/RoomAction"
 import StudentDetails from './pages/StudentDetails';
-
 import Staff from './pages/Staff';
 
 class Routes extends Component {
