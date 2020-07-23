@@ -4,6 +4,10 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const users = require("./routers/api/users");
 const students = require("./routers/api/student");
+const room = require("./routers/api/room");
+const profile = require("./routers/api/profile");
+const projects = require("./routers/api/projects");
+const staff = require("./routers/api/staff");
 const path = require("path");
 
 const app = express();
@@ -19,7 +23,7 @@ const db = require("./config/keys").mongoURI;
 mongoose
   .connect(db, { useNewUrlParser: true })
   .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.log(err));
+  .catch((err) => console.log(err));
 
 // Passport middleware
 app.use(passport.initialize());
@@ -29,8 +33,11 @@ require("./config/passport")(passport);
 
 // Use Routes
 app.use("/api/users", users);
-
+app.use("/api/profile", profile);
+app.use("/api/projects", projects);
 app.use("/api/student", students);
+app.use("/api/room", room);
+app.use("/api/staff", staff);
 
 // Server static assets if in production
 if (process.env.NODE_ENV === "production") {
