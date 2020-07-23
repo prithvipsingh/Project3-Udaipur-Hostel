@@ -1,0 +1,43 @@
+{
+  "name": "project3-udaipur-hostel",
+  "version": "1.0.0",
+  "description": "Login Portal",
+  "main": "server.js",
+  "scripts": {
+    "test": "cross-env NODE_ENV=test jest --forceExit",
+    "test:watch": "cross-env NODE_ENV=test jest --watchAll",
+    "client-install": "npm install --prefix client",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/prithvipsingh/Project3-Udaipur-Hostel.git"
+  },
+  "author": "ptithvi p singh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/prithvipsingh/Project3-Udaipur-Hostel/issues"
+  },
+  "homepage": "https://github.com/prithvipsingh/Project3-Udaipur-Hostel#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
+    "concurrently": "^4.1.2",
+    "cross-env": "^6.0.3",
+    "express": "^4.16.4",
+    "gravatar": "^1.8.0",
+    "jsonwebtoken": "^8.5.1",
+    "mocha": "^6.2.3",
+    "mongoose": "^5.9.21",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "validator": "^12.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
+}
+}
