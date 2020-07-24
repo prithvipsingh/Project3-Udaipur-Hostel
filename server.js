@@ -16,8 +16,8 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// DB Config
-const db = require("./config/keys").mongoURI;
+ //DB Config
+//const db = require("./config/keys").mongoURI;
 
 // connect to mongoDB
 mongoose
@@ -34,7 +34,6 @@ require("./config/passport")(passport);
 // Use Routes
 app.use("/api/users", users);
 app.use("/api/profile", profile);
-app.use("/api/projects", projects);
 app.use("/api/student", students);
 app.use("/api/room", room);
 app.use("/api/staff", staff);
