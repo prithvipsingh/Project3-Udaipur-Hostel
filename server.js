@@ -6,10 +6,10 @@ const users = require("./routers/api/users");
 const students = require("./routers/api/student");
 const room = require("./routers/api/room");
 const profile = require("./routers/api/profile");
-const projects = require("./routers/api/projects");
 const staff = require("./routers/api/staff");
 const path = require("path");
 
+const port = process.env.PORT || 5000;
 const app = express();
 
 // Body Parser middleware
@@ -20,8 +20,7 @@ app.use(bodyParser.json());
 //const db = require("./config/keys").mongoURI;
 
 // connect to mongoDB
-mongoose
-  .connect(db, { useNewUrlParser: true })
+  mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/hostel", { useNewUrlParser: true })
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 
@@ -47,6 +46,6 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-const port = process.env.PORT || 5000;
+
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
