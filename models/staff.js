@@ -23,5 +23,6 @@ const StaffSchema = new Schema({
     },
   });
   
-  module.exports = Staff = mongoose.model("staff", StaffSchema);
+  const Staff = mongoose.model("Staff", StaffSchema);
+  module.exports = Staff;
   

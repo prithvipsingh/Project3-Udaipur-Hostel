@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import classnames from "classnames";
 import { loginUser } from "../../actions/authActions";
-
+import API from "../../utils/API";
 class Login extends Component {
   constructor() {
     super();
@@ -17,7 +17,8 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    if (this.props.auth.isAuthenticated) {
+    const isLoggedIn = localStorage.getItem("isLoggedIn")
+    if(isLoggedIn) {
       this.props.history.push("/dashboard");
     }
   }
@@ -44,7 +45,17 @@ class Login extends Component {
       password: this.state.password
     };
 
-    this.props.loginUser(userData);
+    //this.props.loginUser(userData);
+    API.doLogin(userData)
+    .then(res => {
+      if(res.status){
+        localStorage.setItem("isLoggedIn",true) 
+        console.log("result")
+        this.props.history.push("/dashboard");
+      }else {
+        localStorage.setItem("isLoggedIn",false) 
+      }
+    })
   }
 
   render() {

@@ -1,6 +1,6 @@
 const db = require("../models");
 
-// Defining methods for the StaffsController
+// Defining methods for the staffController
 module.exports = {
   findAll: function(req, res) {
     db.Staff

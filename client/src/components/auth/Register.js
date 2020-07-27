@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import classnames from "classnames";
 import { connect } from "react-redux";
 import { registerUser } from "../../actions/authActions";
+import API from "../../utils/API";
 
 class Register extends Component {
   constructor() {
@@ -46,7 +47,8 @@ class Register extends Component {
       password2: this.state.password2
     };
 
-    this.props.registerUser(newUser, this.props.history);
+    //this.props.registerUser(newUser, this.props.history);
+    API.createUser(newUser);
   }
 
   render() {

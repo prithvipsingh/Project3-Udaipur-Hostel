@@ -1,9 +1,9 @@
 const router = require("express").Router();
-const staffController = require("../../controllers/staffController");
+const staffsController = require("../../controllers/staffsController");
 
 // // Matches with "/api/books"
-// router.route("/")
-//   .get(booksController.findAll)
+ router.route("/")
+   .get(staffsController.findAll)
 //   .post(booksController.create);
 
 // // Matches with "/api/books/:id"
