@@ -21,14 +21,14 @@ class Routes extends Component {
                     <Route exact path="/" component={Home} />
                    {/*  <PrivateRoute exact path="/dashboard" component={Dashboard} /> */}
                     <Route exact path="/dashboard" component={Dashboard} /> 
-                    { <PrivateRoute exact path="/student" component={Student} />}
+                     <Route exact path="/student" component={Student} />
                     { <PrivateRoute exact path="/room/:id" component={RoomAction} /> }
                     {/*<PrivateRoute exact path="/staff" component={Staff} />*/}
                     <Route exact path="/staff" component={Staff} />
-                    <PrivateRoute exact path="/studentdetails/:id" component={StudentDetails} />
+                    { <PrivateRoute exact path="/studentdetails/:id" component={StudentDetails} />}
                     <Route exact path="/register" component={Register} />
                     <Route exact path="/login" component={Login} />
-                   {/*  <Redirect to="/dashboard" /> */}
+                    { <Redirect to="/dashboard" />} 
                 </Switch>
                 <Footer />
             </div >
