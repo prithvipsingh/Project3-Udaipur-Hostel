@@ -1,220 +1,175 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import classnames from "classnames";
+import { createStaffDetails, getStaffDetails } from '../../actions/staffActions';
 import axios from 'axios';
 import ReactLoading from 'react-loading';
 
-class Student extends Component {
+class Staff extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            findBy: '',
-            val: '',
-            data: {},
-            loading: false,
+            name: '',
+            mobile: '',
+            occupation: '',
             errors: {},
         }
         this.onChange = this.onChange.bind(this);
-        this.onFtechDetails = this.onFtechDetails.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
         this.onDelete = this.onDelete.bind(this);
-        this.onStatusChange = this.onStatusChange.bind(this);
+        this.onAvailabilityChange = this.onAvailabilityChange.bind(this);
     }
     onChange(e) {
         this.setState({ [e.target.name]: e.target.value });
     }
-    async onDelete(id) {
-        await axios.delete(`/api/student`, { data: { id } }).then(res => console.log(res)).catch(err => console.log(err));
-        await this.onFtechDetails();
+    async onDelete(_id) {
+        await axios.delete(`/api/staff/${_id}`).then(res => console.log(res)).catch(err => console.log(err));
+        await this.props.getStaffDetails();
     }
-    async onStatusChange(id, isAvailable) {
-        await axios.put(`/api/student/availability`, { id, isAvailable: !isAvailable }).then(res => console.log(res)).catch(err => console.log(err));
-        await this.onFtechDetails();
+    async onAvailabilityChange(_id, isAvailable) {
+        await axios.put(`/api/staff/availability/${_id}`, { isAvailable: !isAvailable }).then(res => console.log(res)).catch(err => console.log(err));
+        await this.props.getStaffDetails();
     }
-    async onFtechDetails() {
-        this.setState({ loading: true });
-        if (this.state.findBy === 'id') {
-            await axios.get(`/api/student/id/${this.state.val}`).then((res) => {
-                this.setState({ data: res, loading: false });
-                console.log(res);
-                if (!res.data.length) {
-                    alert("Not Found");
-                }
-            }).catch(err =>
-                console.log(err)
-            );
+    async onSubmit(e) {
+        e.preventDefault();
+        const staffRecord = {
+            mobile: this.state.mobile,
+            name: this.state.name,
+            occupation: this.state.occupation,
         }
-        else if (this.state.findBy === 'room') {
-            await axios.get(`/api/student/room/${this.state.val}`).then((res) => {
-                this.setState({ data: res, loading: false });
-                console.log(res);
-                if (!res.data.length) {
-                    alert("Not Found");
-                }
-            }
-            ).catch(err =>
-                console.log(err)
-            );
-        } else if (this.state.findBy === 'isAvailable') {
-            await axios.get(`/api/student/all`).then((res) => {
-                let tempVal = this.state.val;
-                tempVal = tempVal.trim().toLowerCase();
-                if (tempVal === 'absent') {
-                    tempVal = false
-                } else if (tempVal === 'present') {
-                    tempVal = true
-                } else {
-                    this.setState({ loading: false })
-                    return alert("Input can be 'absent' or 'present' only!");
-                }
-                const filteredData = res.data ? res.data.filter(el => el.isAvailable === tempVal
-                ) : [];
-                const data = {
-                    data: filteredData
-                }
-                this.setState({ data: data, loading: false });
-                if (!filteredData.length) {
-                    alert("Not Found");
-                }
-            }
-            ).catch(err =>
-                console.log(err)
-            );
-        } else {
-            this.setState({ loading: false })
-            return alert('Select Room number or Student Id?');
+        console.table(staffRecord);
+        await this.props.createStaffDetails(staffRecord);
+        this.setState({
+            mobile: '',
+            name: '',
+            occupation: '',
+            errors: {}
+        });
+    }
+    UNSAFE_componentWillReceiveProps(nextProps) {
+        if (nextProps.errors) {
+            this.setState({ errors: nextProps.errors });
         }
     }
-    onBatchSelect(batch) {
-        this.props.history.push(`/studentdetails/${batch}`);
+    async componentDidMount() {
+        await this.props.getStaffDetails();
     }
     render() {
-        const { errors, data, loading } = this.state;
+        const { staffData, loading } = this.props.staffData;
         let tableContent;
-        (!data) ? (
+        (!staffData.length || loading) ? (
             tableContent = null
-        ) : tableContent = data.data ? data.data.map(
+        ) : tableContent = staffData.length ? staffData.map(
             el =>
                 <tr key={el._id} >
-                    <th scope="row">{data.data.indexOf(el) + 1}</th>
+                    <th scope="row">{staffData.indexOf(el) + 1}</th>
                     <td>{el.name ? el.name : "-"}</td>
-                    <td>{el.email ? el.email : "-"}</td>
-                    <td>{el.id ? el.id : "-"}</td>
-                    <td>{el.block ? el.block : "-"}</td>
-                    <td>{el.room ? el.room : "-"}</td>
-                    <td>{el.gender ? el.gender : "-"}</td>
-                    <td>{el.isAvailable ? <button type="button" className="btn btn-primary" data-toggle="tooltip" data-placement="right" title="Click to Mark Absent"
-                        onClick={() => this.onStatusChange(el.id, el.isAvailable)}
+                    <td>{el.occupation ? el.occupation : "-"}</td>
+                    <td>{el.mobile ? el.mobile : "-"}</td>
+                    <td>{el.isAvailable ? <button type="button" className="btn btn-primary" data-toggle="tooltip" data-placement="right" title="Click to set Unavailable"
+                        onClick={() => this.onAvailabilityChange(el._id, el.isAvailable)}
                     >
-                        Present
+                        Available
                     </button>
-                        : <button type="button" className="btn btn-danger" data-toggle="tooltip" data-placement="right" title="Click to Mark Present"
-                            onClick={() => this.onStatusChange(el.id, el.isAvailable)}
+                        : <button type="button" className="btn btn-danger" data-toggle="tooltip" data-placement="right" title="Click to set Available"
+                            onClick={() => this.onAvailabilityChange(el._id, el.isAvailable)}
                         >
-                            Absent
+                            Unavailable
                     </button>}</td>
                     <td style={{ cursor: 'pointer', color: '#00a4eb' }}
                         onClick=
-                        {() => this.onDelete(el.id)}
+                        {() => this.onDelete(el._id)}
                     >
                         Click Me
                     </td>
                 </tr>
         ) : null
-
+        const { errors } = this.state;
         return (
             <div className="mid container">
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <div className="card" style={{ width: "12rem" }}>
-                        <div className="card-body">
-                            <h5 className="card-title">Undergraduate</h5>
-                            <h6 className="card-subtitle mb-2 text-muted">Science& IT</h6>
-                            <p onClick={() => this.onBatchSelect('2016')} className="card-text" style={{
-                                cursor: 'pointer',
-                                color: '#00a4eb'
-                            }}>Add or Check Info</p>
-                        </div>
-                    </div>
-                    <div className="card" style={{ width: "12rem" }}>
-                        <div className="card-body">
-                            <h5 className="card-title">Undergraduate</h5>
-                            <h6 className="card-subtitle mb-2 text-muted">Arts& Commerce</h6>
-                            <p onClick={() => this.onBatchSelect('2017')} className="card-text" style={{
-                                cursor: 'pointer',
-                                color: '#00a4eb'
-                            }}>Add or Check Info</p>
-                        </div>
-                    </div>
-                    <div className="card" style={{ width: "12rem" }}>
-                        <div className="card-body">
-                            <h5 className="card-title">Postgraduate</h5>
-                            <h6 className="card-subtitle mb-2 text-muted">Science& IT</h6>
-                            <p onClick={() => this.onBatchSelect('2018')} className="card-text" style={{
-                                cursor: 'pointer',
-                                color: '#00a4eb'
-                            }}>Add or Check Info</p>
-                        </div>
-                    </div>
-                    <div className="card" style={{ width: "12rem" }}>
-                        <div className="card-body">
-                            <h5 className="card-title">Postgraduate</h5>
-                            <h6 className="card-subtitle mb-2 text-muted">Arts& Commerce</h6>
-                            <p onClick={() => this.onBatchSelect('2019')} className="card-text" style={{
-                                cursor: 'pointer',
-                                color: '#00a4eb'
-                            }}>Add or Check Info</p>
-                        </div>
-                    </div>
-                </div>
+                <h1>{this.state.block}</h1>
                 <br />
-                <label htmlFor="find" style={{ marginLeft: '14px' }}><h5>Find By</h5></label>
-                <div className="col-8 input-group-prepend">
-                    <select className={classnames("form-control", {
-                        "is-invalid": errors.room
-                    })}
-                        id="find" onChange={this.onChange} value={this.state.findBy}
-                        name="findBy"
-                    >   <option value="" defaultValue disabled>Select</option>
-                        <option value="id">Student Id</option>
-                        <option value="room">Room No.</option>
-                        <option value="isAvailable">Absent/Present</option>
-                    </select>
-                    <input type="text" id="val" placeholder="Value"
-                        className={classnames("form-control", {
-                            "is-invalid": errors.room
-                        })}
-                        onChange={this.onChange}
-                        name="val"
-                        value={this.state.val}
-                        required={true}
-                    />
-                    {errors.room && (
-                        <div className="invalid-tooltip">{errors.room}</div>
-                    )}
-                    <button className="btn btn-primary" style={{ fontSize: '12px', width: '200px' }} onClick={this.onFtechDetails}>Find Details</button>
-                </div>
+                <form onSubmit={this.onSubmit}>
+                    <div className="row">
+                        <div className="col">
+                            <label htmlFor="name">Name</label>
+                            <input type="text" id="name" placeholder="Name"
+                                className={classnames("form-control", {
+                                    "is-invalid": errors.name
+                                })}
+                                onChange={this.onChange}
+                                name="name"
+                                value={this.state.name}
+                            />
+                            {errors.name && (
+                                <div className="invalid-tooltip">{errors.name}</div>
+                            )}
+                        </div>
+                        <div className="col">
+                            <label htmlFor="occupation">Occupation</label>
+                            <input type="text" id="occupation" placeholder="Occupation"
+                                className={classnames("form-control", {
+                                    "is-invalid": errors.occupation
+                                })}
+                                onChange={this.onChange}
+                                name="occupation"
+                                value={this.state.occupation}
+                            />
+                            {errors.occupation && (
+                                <div className="invalid-tooltip">{errors.occupation}</div>
+                            )}
+                        </div>
+                        <div className="col">
+                            <label htmlFor="mobile">Cellphone Number</label>
+                            <input type="number" id="mobile" placeholder="Cellphone Number"
+                                className={classnames("form-control", {
+                                    "is-invalid": errors.mobile
+                                })}
+                                onChange={this.onChange}
+                                name="mobile"
+                                value={this.state.mobile}
+                            />
+                            {errors.mobile && (
+                                <div className="invalid-tooltip">{errors.mobile}</div>
+                            )}
+                        </div>
+                        <div className="col-auto" >
+                            <button type="submit" style={{ verticalAlign: '-39px' }} className="btn btn-primary">Add</button>
+                        </div>
+                    </div>
+                </form>
+
                 <div style={{ marginTop: '50px', overflow: 'scroll', maxHeight: 800 }}>
                     {!loading ? <table className="table table-striped table-hover">
                         <thead className="thead-dark">
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Name</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">ID</th>
-                                <th scope="col">Block</th>
-                                <th scope="col">Room No.</th>
-                                <th scope="col">Gender</th>
-                                <th scope="col">Leave Status</th>
+                                <th scope="col">Occupation</th>
+                                <th scope="col">Cellphone Number</th>
+                                <th scope="col">Available/ Unavailable</th>
                                 <th scope="col">Delete?</th>
                             </tr>
                         </thead>
                         <tbody>
                             {tableContent}
                         </tbody>
-                    </table> : <div style={{ display: 'flex', justifyContent: 'center' }}><ReactLoading type="bars" color="#f56f42" /></div>
-                    }
+                    </table> : <div style={{ display: 'flex', justifyContent: 'center' }}><ReactLoading type="bars" color="#f56f42" /></div>}
                 </div>
             </div>
         );
     }
 }
 
-export default Student;
+Staff.propTypes = {
+    createStaffDetails: PropTypes.func.isRequired,
+    getStaffDetails: PropTypes.func.isRequired,
+    errors: PropTypes.object.isRequired,
+}
+
+const mapStateToProps = state => ({
+    errors: state.errors,
+    staffData: state.staffData,
+});
+export default connect(mapStateToProps, { createStaffDetails, getStaffDetails })(Staff);

@@ -1,10 +1,12 @@
 import axios from "axios";
-import{
+
+import {
     GET_ROOM_ACTION,
     ENABLE_ROOM_ACTION_LOADING,
     GET_ERRORS,
     DISABLE_ROOM_ACTION_LOADING,
 } from "./types";
+
 export const getRoomAction = (block) => dispatch => {
     dispatch(enableRoomActionLoading());
     axios

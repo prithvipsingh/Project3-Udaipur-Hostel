@@ -1,4 +1,5 @@
 import axios from "axios";
+
 import {
     GET_STUDENT_DETAILS,
     ENABLE_STUDENT_DETAILS_LOADING,

@@ -22,7 +22,7 @@ if (localStorage.jwtToken) {
   const currentTime = Date.now() / 1000;
   if (decoded.exp < currentTime) {
     // logout User
-   store.dispatch(logoutUser());
+    store.dispatch(logoutUser());
     // redirect to login
     window.location.href = "/login";
   }
