@@ -2,13 +2,29 @@ img {
   width: 100%;
 }
 
+h1 
+{
+  color: black;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: x-small;
+}
 .mid {
   min-height: 100vh;
 }
-
+.navbar-brand{
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: large;
+}
+.navbar-nav{
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: large;
+}
+.navbar-dark{
+  background-color:#137a63;
+}
 .landing {
   position: relative;
-  background: url("./img/hostel.jpg") no-repeat;
+  background-image: url(./img/udaipurcity.jpg);
   background-size: cover;
   background-position: center;
   height: 100vh;
@@ -21,7 +37,6 @@ img {
 }
 
 .dark-overlay {
-  background-color: rgba(0, 0, 0, 0.7);
   position: absolute;
   top: 0;
   left: 0;
