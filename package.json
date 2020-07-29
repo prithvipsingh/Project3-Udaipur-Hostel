@@ -1,5 +1,5 @@
 {
-  "name": "hostel-management",
+  "name": "udaipur-hostel",
   "version": "1.0.0",
   "description": "Login Portal",
   "main": "server.js",
@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/starkblaze01/Hostel-Management.git"
+    "url": "https://github.com/prithvipsingh/Project3-Udaipur-Hostel"
   },
-  "author": "Mayank Pathela",
+  "author": "Prithvi P Singh",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/starkblaze01/Hostel-Management/issues"
+    "url": "https://github.com/prithvipsingh/Project3-Udaipur-Hostel"
   },
-  "homepage": "https://github.com/starkblaze01/Hostel-Management#readme",
+  "homepage": "https://github.com/prithvipsingh/Project3-Udaipur-Hostel",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
